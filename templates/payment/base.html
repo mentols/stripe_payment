@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Shop</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?version=3.52.1&features=fetch"></script>
+    <script src="https://js.stripe.com/v3/"></script>
+</head>
+<body>
+<style>
+    a {
+        font-size: 25px;
+        outline: none;
+        text-decoration: none;
+        display: inline-block;
+        text-align: center;
+        line-height: 3;
+        color: black;
+    }
+</style>
+<a href="{% url "home-page" %}">Shop</a>
+{% block content %}
+
+{% endblock %}
+</body>
+</html>

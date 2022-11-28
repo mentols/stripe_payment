@@ -1,0 +1,8 @@
+{% extends "payment/base.html" %}
+{% block content %}
+    {% if user %}
+        <a href="{% url "basket" %}">Basket</a>
+    {% endif %}
+    <br>
+    Cancel
+{% endblock %}

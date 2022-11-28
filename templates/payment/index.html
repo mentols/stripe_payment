@@ -1,0 +1,82 @@
+{% extends "payment/base.html" %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Buy item</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?version=3.52.1&features=fetch"></script>
+    <script src="https://js.stripe.com/v3/"></script>
+    <script src="ajax-call.js"></script>
+</head>
+<body>
+
+
+{% block content %}
+    {% if user %}
+        <a href="{% url "basket" %}">In Basket</a>
+    {% endif %}
+    {% csrf_token %}
+    {% for product in products %}
+        <style>
+            .card {
+                box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+                transition: 0.3s;
+            }
+
+            .card:hover {
+                box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+            }
+
+            .container {
+                padding: 2px 16px;
+            }
+        </style>
+
+        <div class="card">
+            <div class="container">
+                <h3>Name: {{ product.product_name }}</h3>
+                <h4>Description: {{ product.description }}</h4>
+                <h5>Price: {{ product.get_display_price }}{{ product.currency }}</h5>
+                <button type="button" id="checkout-button{{ product.id }}">Buy</button>
+                {% if user %}
+                    <form action="" method="post">
+                        {% csrf_token %}
+                        <button name="add" value="{{ product.id }}">In basket</button>
+                    </form>
+                {% endif %}
+            </div>
+        </div>
+
+
+        <script type="text/javascript">
+            var csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+            var stripe = Stripe("{{ PUBLIC_API_KEY }}");
+            var checkoutButton = document.getElementById("checkout-button{{ product.id }}");
+            checkoutButton.addEventListener("click", function () {
+                fetch("{% url 'create-checkout-session' product.id %}", {
+                    method: "POST",
+                    headers: {
+                        'X-CSRFToken': csrftoken,
+                    }
+                })
+                    .then(function (response) {
+                        return response.json();
+                    })
+                    .then(function (session) {
+                        return stripe.redirectToCheckout({sessionId: session.id});
+                    })
+                    .then(function (result) {
+                        if (result.error) {
+                            alert(result.error.message);
+                        }
+                    })
+                    .catch(function (error) {
+                        console.error("Error:", error);
+                    });
+            });
+        </script>
+
+    {% endfor %}
+
+{% endblock %}
+</body>
+</html>
