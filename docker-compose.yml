@@ -1,0 +1,12 @@
+version: '3.9'
+
+services:
+  web:
+    image: strupe_pay
+    restart: always
+    build: .
+    command: python3 manage.py runserver 127.0.0.0:8000
+    volumes:
+      - ./:/app/
+    ports:
+      - 8000:8000
