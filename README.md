@@ -53,4 +53,5 @@ ____
 - `/api/v1/buy_order/<int:pk>/` – создание сессии для покупки корзины
 ____
 # Схема базы данных
-![схема бд](https://github.com/mentols/stripe_payment/img/db_struct.png)
+![схема бд](https://github.com/mentols/stripe_payment/blob/master/img/db_struct.png)
+
